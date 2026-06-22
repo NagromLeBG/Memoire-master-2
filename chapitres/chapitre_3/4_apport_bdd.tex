@@ -1,0 +1,71 @@
+\section{création des informations pour la base de données}
+
+Après avoir crée les tables nécessaires pour stocker les informations sur les auteurs, les romans et les relations entre eux, il est temps d'insérer les données relatives aux frères Goncourt et à leurs œuvres.
+
+\begin{lstlisting}[language=SQL, caption={Insertion des frères Goncourt dans la base de données}]
+/*
+Insertion des freres Goncourt.
+Il est aussi possible d'ajouter leurs dates de naissance et de mort
+afin d'enrichir la base de donnees.
+*/
+INSERT INTO auteurs (nom, prenom) 
+VALUES
+    ('de Goncourt', 'Edmond'),
+    ('de Goncourt', 'Jules');
+/*
+Insertion des romans des freres Goncourt
+avec leur annee de publication.
+*/
+INSERT INTO romans (titre, annee_publication) 
+VALUES
+    ('Charles Demailly', 1860),
+    ('Soeur Philomene', 1861),
+    ('Renee Mauperin', 1864),
+    ('Germinie Lacerteux', 1865),
+    ('Manette Salomon', 1867),
+    ('Madame Gervaisais', 1869),
+    ('La Fille Elisa', 1877),
+    ('Freres Zemganno', 1879),
+    ('La Faustin', 1882),
+    ('Cherie', 1884);
+/*
+Insertion des relations entre les auteurs et les romans.
+Les six premiers romans sont associes aux deux freres Goncourt.
+Les romans suivants sont associes uniquement a Edmond de Goncourt.
+*/
+INSERT INTO auteurs_romans (id_auteur, id_roman) 
+VALUES
+    (1,1), (2,1),
+    (1,2), (2,2),
+    (1,3), (2,3),
+    (1,4), (2,4),
+    (1,5), (2,5),
+    (1,6), (2,6),
+    (1,7),
+    (1,8),
+    (1,9),
+    (1,10);
+-- Mise a jour des dates de naissance et de mort de Jules de Goncourt.
+UPDATE auteurs
+SET date_naissance = 1830,
+    date_mort = 1870
+WHERE id_auteur = 2;
+
+-- Mise a jour des dates de naissance et de mort d'Edmond de Goncourt.
+UPDATE auteurs
+SET date_naissance = 1822,
+    date_mort = 1896
+WHERE id_auteur = 1;
+\end{lstlisting}
+
+Ce code permet d'insérer dans la base de données les informations relatives aux frères Goncourt et à leurs romans. Dans un premier temps, les deux auteurs sont ajoutés dans la table \texttt{auteurs}. Ils reçoivent chacun un identifiant, qui permettra ensuite de les relier aux œuvres présentes dans la base.
+
+La deuxième partie du code insère les romans des frères Goncourt dans la table \texttt{romans}. Chaque œuvre est associée à son titre et à son année de publication. Cette étape permet donc de constituer une partie du corpus à partir des romans retenus pour l'analyse.
+
+Ensuite, la table \texttt{auteurs\_romans} est utilisée pour associer les auteurs aux romans. Cette table est importante, car elle permet de gérer le cas particulier des œuvres écrites à deux mains. Les six premiers romans sont associés à Edmond et Jules de Goncourt, tandis que les romans publiés après la mort de Jules sont associés uniquement à Edmond. Cela permet de conserver une information plus précise sur l'attribution des œuvres.
+
+Enfin, les deux dernières requêtes mettent à jour les dates de naissance et de mort des auteurs. Ces informations biographiques ne sont pas directement nécessaires pour stocker les textes, mais elles permettent d'enrichir la base de données. Elles peuvent aussi être utiles par la suite si l'on souhaite croiser les résultats de l'analyse avec des éléments chronologiques ou biographiques.
+
+Ce passage sert donc à remplir une première partie de la base de données avec les auteurs, les romans et les relations entre eux. Il montre aussi l'intérêt de séparer les informations dans plusieurs tables : les auteurs sont stockés d'un côté, les romans de l'autre, et la relation entre les deux est conservée dans une table spécifique.
+
+Il faut maintenant ajouter les romans dans la base de données, il peut y avoir plusieurs façons de le faire, 

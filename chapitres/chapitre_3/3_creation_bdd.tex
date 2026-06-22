@@ -1,0 +1,81 @@
+\section{Création de la base de données}
+
+Apres avoir nettoyé les textes, il a fallu créer une base de données pour stocker les informations sur les romans. J'ai choisi d'utiliser le système de gestion de base de données relationnelle \textsl{MySQL} pour créer la base de données.
+
+Je vais présenter la structure de la base de données ainsi que les différentes tables qui la composent. La base de données est composée de plusieurs tables, chacune ayant un rôle spécifique dans le stockage des informations sur les romans.
+
+Je vais choisir de les presenter dans le corps de texte de mon mémoire\footnote{Je précise aussi que tout les codes utilisé pour la présentation de ce mémoire sont disponible sur mon github} et non en annexe pour eviter de surcharger l'annexe avec des informations qui ne sont pas directement liées à l'analyse des textes. 
+
+\begin{lstlisting}[language=SQL, caption={Création de la base de données romans\_nlp}]
+CREATE DATABASE romans_nlp;
+USE romans_nlp;
+
+-- Creation des tables pour la base de donnees des romans et des auteurs
+CREATE TABLE auteurs (
+    id_auteur INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100)
+);
+
+-- Table pour stocker les romans, avec leur titre et leur annee de publication
+CREATE TABLE romans (
+    id_roman INT PRIMARY KEY AUTO_INCREMENT,
+    titre VARCHAR(255) NOT NULL,
+    annee_publication INT,
+    texte_brut LONGTEXT
+);
+
+-- Table d'association pour gerer la relation plusieurs-a-plusieurs entre auteurs et romans
+CREATE TABLE auteurs_romans (
+    id_auteur INT NOT NULL,
+    id_roman INT NOT NULL,
+    PRIMARY KEY (id_auteur, id_roman),
+    FOREIGN KEY (id_auteur) REFERENCES auteurs(id_auteur),
+    FOREIGN KEY (id_roman) REFERENCES romans(id_roman)
+);
+
+-- Table pour stocker les segments extraits des romans, avec leur ordre de segmentation
+CREATE TABLE segments (
+    id_segment INT PRIMARY KEY AUTO_INCREMENT,
+    id_roman INT NOT NULL,
+    ordre_segment INT NOT NULL,
+    texte_segment LONGTEXT NOT NULL,
+    FOREIGN KEY (id_roman) REFERENCES romans(id_roman)
+);
+
+/*
+Apres reflexion, il est egalement possible d'ajouter les dates
+de naissance et de mort des auteurs afin d'enrichir la base de donnees.
+*/
+ALTER TABLE auteurs
+ADD date_naissance INT;
+
+ALTER TABLE auteurs
+ADD date_mort INT;
+
+-- Table pour stocker les phrases extraites des romans, avec leur motif d'extraction
+CREATE TABLE phrase_roman (
+    id_phrase INT PRIMARY KEY AUTO_INCREMENT,
+    id_roman INT NOT NULL,
+    ordre_phrase INT NOT NULL,
+    texte_phrase TEXT NOT NULL,
+    motif_phrase TEXT NOT NULL,
+    FOREIGN KEY (id_roman) REFERENCES romans(id_roman)
+);
+\end{lstlisting}
+
+Ce code permet de créer la base de données utilisée pour stocker les romans du corpus ainsi que les informations nécessaires à leur analyse. La base, nommée \texttt{romans\_nlp}, est d'abord créée puis sélectionnée afin que toutes les tables suivantes y soient enregistrées.
+
+La première table, \texttt{auteurs}, sert à stocker les informations relatives aux auteurs. Chaque auteur reçoit un identifiant unique, auquel sont associés son nom et, lorsque l'information est disponible, son prénom. Cette table est ensuite complétée par deux colonnes supplémentaires, \texttt{date\_naissance} et \texttt{date\_mort}, afin d'enrichir la description des auteurs et de permettre d'éventuelles analyses chronologiques.
+
+La table \texttt{romans} contient les informations principales sur les œuvres du corpus. Elle associe à chaque roman un identifiant unique, un titre, une année de publication ainsi que le texte brut du roman. Le choix du type \texttt{LONGTEXT} pour le champ \texttt{texte\_brut} permet de stocker des textes longs, ce qui est nécessaire dans le cas de romans complets.
+
+La table \texttt{auteurs\_romans} permet de faire le lien entre les auteurs et les romans. Elle sert à gérer une relation de type plusieurs-à-plusieurs : un auteur peut être associé à plusieurs romans, et un roman peut éventuellement être associé à plusieurs auteurs. Les clés étrangères \texttt{id\_auteur} et \texttt{id\_roman} permettent de relier cette table aux tables \texttt{auteurs} et \texttt{romans}.
+
+La table \texttt{segments} sert à stocker les segments extraits des romans. Chaque segment est rattaché à un roman grâce à la clé étrangère \texttt{id\_roman}. Le champ \texttt{ordre\_segment} permet de conserver l'ordre d'apparition des segments dans le texte d'origine. Cela est important, car même si le texte est découpé pour les traitements, il reste possible de retrouver sa progression initiale.
+
+Enfin, la table \texttt{phrase\_roman} permet de stocker les phrases extraites des romans. Chaque phrase est associée au roman dont elle provient, à son ordre d'apparition, à son contenu textuel et au motif qui a permis son extraction. Ce dernier champ est important, car il permet de garder une trace de la méthode utilisée pour sélectionner les phrases et de relier chaque extraction à un critère précis.
+
+L'ensemble de cette structure permet donc de conserver à la fois les textes complets, leurs découpages en segments, les phrases extraites et les informations bibliographiques liées aux auteurs et aux œuvres. Elle constitue ainsi une base organisée pour les traitements de fouille de texte et d'analyse automatique du corpus.
+
+
