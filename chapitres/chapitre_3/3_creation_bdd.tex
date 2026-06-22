@@ -1,12 +1,20 @@
 \section{Création de la base de données}
 
-Apres avoir nettoyé les textes, il a fallu créer une base de données pour stocker les informations sur les romans. J'ai choisi d'utiliser le système de gestion de base de données relationnelle \textsl{MySQL} pour créer la base de données.
+Après avoir nettoyé les textes, il a fallu créer une base de données pour stocker les informations relatives aux romans. J'ai choisi d'utiliser le système de gestion de base de données relationnelle \textsl{MySQL}, car il permet d'organiser les données sous forme de tables et de conserver des relations claires entre les auteurs, les romans et les unités textuelles extraites.
 
-Je vais présenter la structure de la base de données ainsi que les différentes tables qui la composent. La base de données est composée de plusieurs tables, chacune ayant un rôle spécifique dans le stockage des informations sur les romans.
+Je vais donc présenter la structure de cette base de données ainsi que les différentes tables qui la composent. Chaque table a un rôle précis : certaines servent à stocker les informations bibliographiques, tandis que d'autres permettent de conserver les textes, les segments ou encore les phrases extraites pour l'analyse.
 
-Je vais choisir de les presenter dans le corps de texte de mon mémoire\footnote{Je précise aussi que tout les codes utilisé pour la présentation de ce mémoire sont disponible sur mon github} et non en annexe pour eviter de surcharger l'annexe avec des informations qui ne sont pas directement liées à l'analyse des textes. 
+J'ai choisi de présenter ce code directement dans le corps du mémoire\footnote{Je précise également que tous les codes utilisés pour la réalisation de ce mémoire sont disponibles sur mon GitHub.} et non uniquement en annexe, afin de rendre plus claire la manière dont les données ont été organisées avant l'analyse. 
 
-\begin{lstlisting}[language=SQL, caption={Création de la base de données romans\_nlp}]
+\begin{listing}[htbp]
+\begin{minted}[
+    fontsize=\scriptsize,
+    breaklines=true,
+    frame=lines,
+    linenos=true,
+    numbersep=5pt,
+    autogobble
+]{sql}
 CREATE DATABASE romans_nlp;
 USE romans_nlp;
 
@@ -62,7 +70,9 @@ CREATE TABLE phrase_roman (
     motif_phrase TEXT NOT NULL,
     FOREIGN KEY (id_roman) REFERENCES romans(id_roman)
 );
-\end{lstlisting}
+\end{minted}
+\caption{Création de la base de données romans\_nlp}
+\end{listing}
 
 Ce code permet de créer la base de données utilisée pour stocker les romans du corpus ainsi que les informations nécessaires à leur analyse. La base, nommée \texttt{romans\_nlp}, est d'abord créée puis sélectionnée afin que toutes les tables suivantes y soient enregistrées.
 
@@ -77,5 +87,3 @@ La table \texttt{segments} sert à stocker les segments extraits des romans. Cha
 Enfin, la table \texttt{phrase\_roman} permet de stocker les phrases extraites des romans. Chaque phrase est associée au roman dont elle provient, à son ordre d'apparition, à son contenu textuel et au motif qui a permis son extraction. Ce dernier champ est important, car il permet de garder une trace de la méthode utilisée pour sélectionner les phrases et de relier chaque extraction à un critère précis.
 
 L'ensemble de cette structure permet donc de conserver à la fois les textes complets, leurs découpages en segments, les phrases extraites et les informations bibliographiques liées aux auteurs et aux œuvres. Elle constitue ainsi une base organisée pour les traitements de fouille de texte et d'analyse automatique du corpus.
-
-

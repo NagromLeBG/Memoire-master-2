@@ -50,12 +50,13 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\lstset{
-basicstyle=\ttfamily\small,
+\usepackage{float}
+\usepackage{minted}
+\usepackage{caption}
+\setminted{
+fontsize=\small,
 breaklines=true,
 frame=single,
-numbers=left,
-numberstyle=\tiny,
-captionpos=b,
-showstringspaces=false
+linenos=true,
+autogobble=true
 }

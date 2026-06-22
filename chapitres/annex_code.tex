@@ -1,1 +1,118 @@
-\chapter*{Annexe technique : code }
+\chapter*{Annexe technique : code}
+\addcontentsline{toc}{chapter}{Annexe technique : code}
+
+\subsection{Le code suivant présente le script Python utilisé pour nettoyer les textes extraits des fichiers EPUB après leur conversion au format \textsl{.txt}}.
+
+\begin{minted}[
+    fontsize=\scriptsize,
+    breaklines=true,
+    breakanywhere=true,
+    linenos=true,
+    numbersep=5pt,
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1,
+    autogobble
+]{python}
+from pathlib import Path
+import re
+
+
+def nettoyage_structure_epub(texte):
+    texte_propre = texte
+
+    # Nettoyage initial des espaces insécables
+    texte_propre = re.sub(r'[\xa0\u202f]', ' ', texte_propre)
+
+    # Suppression des éléments placés entre crochets
+    texte_propre = re.sub(r'\[.*?\]', '', texte_propre)
+
+    # Conservation uniquement des caractères utiles pour l'analyse
+    texte_propre = re.sub(
+        r'[^a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇœŒ'
+        r'\s.,;:!?\-()\[\]]',
+        '',
+        texte_propre
+    )
+
+    # Suppression des chiffres collés aux mots
+    texte_propre = re.sub(
+        r'([a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇœŒ])\d+',
+        r'\1',
+        texte_propre
+    )
+
+    # Nettoyage des tirets et des guillemets
+    texte_propre = re.sub(r'-{2,}', '-', texte_propre)
+    texte_propre = re.sub(r'["«»“”]', '', texte_propre)
+
+    # Suppression des numéros de page isolés
+    texte_propre = re.sub(r'(?m)^\s*\d+\s*$', '', texte_propre)
+
+    # Suppression des titres de chapitre en chiffres romains
+    texte_propre = re.sub(r"(?im)^\s*[IVXLCDM]+\s*$", "", texte_propre)
+
+    # Suppression de certains éléments propres aux fichiers EPUB
+    texte_propre = re.sub(r"(?im)^\s*Liste des titres\s*$", "", texte_propre)
+    texte_propre = re.sub(r"(?im)^\s*Table des matières du titre\s*$", "", texte_propre)
+
+    # Suppression des lignes entièrement écrites en majuscules
+    texte_propre = re.sub(
+        r"(?m)^\s*[A-ZÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ'’\s]+\s*$",
+        "", texte_propre
+    )
+
+    # Transformation du texte en un seul bloc continu
+    texte_propre = re.sub(r'\s+', ' ', texte_propre)
+
+    # Segmentation du texte en phrases
+    pattern_segmentation = r"(?<!\bM)([.?!])\s+(?=[A-ZÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ\-])"
+    texte_propre = re.sub(pattern_segmentation, r"\1\n", texte_propre)
+
+    # Remise à la ligne des dialogues
+    texte_propre = re.sub(r'\s+(?=-)', r'\n', texte_propre)
+
+    return texte_propre.strip()
+
+
+# Définition des dossiers source et destination
+dossier_source = Path("nom_dossier")
+dossier_destination = Path("Text_nettoyé/nom_dossier")
+
+# Création du dossier de destination s'il n'existe pas
+dossier_destination.mkdir(parents=True, exist_ok=True)
+
+# Compteur permettant de suivre le nombre de fichiers traités
+fichiers_traites = 0
+
+print(f"Début du traitement des fichiers dans : {dossier_source}...\n")
+
+# Boucle sur tous les fichiers .txt du dossier source
+for fichier_source in dossier_source.glob("*.txt"):
+
+    print(f"-> Nettoyage de : {fichier_source.name}")
+
+    try:
+        # Lecture du fichier brut
+        contenu_brut = fichier_source.read_text(encoding="utf-8")
+
+        # Nettoyage du texte
+        contenu_propre = nettoyage_structure_epub(contenu_brut)
+
+        # Création du nom du fichier nettoyé
+        nom_fichier_propre = f"{fichier_source.stem}_clean.txt"
+        fichier_destination = dossier_destination / nom_fichier_propre
+
+        # Sauvegarde du fichier nettoyé
+        fichier_destination.write_text(contenu_propre, encoding="utf-8")
+
+        fichiers_traites += 1
+
+    except Exception as e:
+        print(f"   [ERREUR] Impossible de traiter {fichier_source.name} : {e}")
+
+print(
+    f"\nOpération terminée ! {fichiers_traites} fichiers ont été nettoyés "
+    f"et placés dans le dossier '{dossier_destination}'."
+)
+\end{minted}

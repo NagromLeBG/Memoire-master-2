@@ -1,12 +1,17 @@
-\section{création des informations pour la base de données}
+\section{Création des informations pour la base de données}
 
-Après avoir crée les tables nécessaires pour stocker les informations sur les auteurs, les romans et les relations entre eux, il est temps d'insérer les données relatives aux frères Goncourt et à leurs œuvres.
+Après avoir créé les tables nécessaires pour stocker les informations sur les auteurs, les romans et les relations entre eux, il est temps d'insérer les données relatives aux frères Goncourt et à leurs œuvres. Le code suivant présente donc l'insertion des auteurs, des romans et des relations entre ces deux tables.
 
-\begin{lstlisting}[language=SQL, caption={Insertion des frères Goncourt dans la base de données}]
+\begin{minted}[
+    fontsize=\scriptsize,
+    breaklines=true,
+    frame=lines,
+    linenos=true,
+    numbersep=5pt,
+    autogobble
+]{sql}
 /*
 Insertion des freres Goncourt.
-Il est aussi possible d'ajouter leurs dates de naissance et de mort
-afin d'enrichir la base de donnees.
 */
 INSERT INTO auteurs (nom, prenom) 
 VALUES
@@ -14,7 +19,6 @@ VALUES
     ('de Goncourt', 'Jules');
 /*
 Insertion des romans des freres Goncourt
-avec leur annee de publication.
 */
 INSERT INTO romans (titre, annee_publication) 
 VALUES
@@ -56,7 +60,8 @@ UPDATE auteurs
 SET date_naissance = 1822,
     date_mort = 1896
 WHERE id_auteur = 1;
-\end{lstlisting}
+
+\end{minted}
 
 Ce code permet d'insérer dans la base de données les informations relatives aux frères Goncourt et à leurs romans. Dans un premier temps, les deux auteurs sont ajoutés dans la table \texttt{auteurs}. Ils reçoivent chacun un identifiant, qui permettra ensuite de les relier aux œuvres présentes dans la base.
 

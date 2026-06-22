@@ -23,6 +23,7 @@
 *.sav
 *.backup
 *.bbl-SAVE-ERROR
+_minted
 
 # LaTeXmk
 *.latexmk
