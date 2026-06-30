@@ -19,7 +19,6 @@ Le tableau suivant présente les dix mots les plus caractéristiques de chaque t
 \textbf{Topic} & \textbf{Mots caractéristiques} \\
 \midrule
 \endhead
-
 Topic 1 & femme, mari, chose, bon, homme, cher, ménage, histoire, vrai, plaisir \\
 Topic 2 & travail, peuple, vie, usine, bonheur, justice, ouvrier, œuvre, humanité, terre \\
 Topic 3 & arbre, soleil, herbe, eau, ciel, jardin, ombre, terre, feuille, branche \\
@@ -49,7 +48,6 @@ Topic 26 & salon, comte, dame, comtesse, satin, marquis, blanc, rose, femme, pet
 Topic 27 & empereur, ministre, député, préfet, président, colonel, politique, affaire, lettre, ami \\
 Topic 28 & amour, cœur, vie, tendresse, jour, pensée, bonheur, amant, heure, joie \\
 Topic 29 & insurgé, barricade, national, ville, fusil, garde, républicain, ouvrier, place, peuple \\
-
 \bottomrule
 \end{longtable}
 
@@ -128,7 +126,6 @@ Cette attribution permet de passer d'une simple liste de topics à une analyse p
 \textbf{Topic dominant} & \textbf{Nombre de segments} \\
 \midrule
 \endhead
-
 L'amour, le bonheur et les sentiments & 335 \\
 La chambre, le lit et l'espace intime & 327 \\
 Le pouvoir politique et les affaires publiques & 266 \\
@@ -158,7 +155,6 @@ Les liens familiaux, l'écriture et les proches & 104 \\
 Le monde ferroviaire & 94 \\
 La bourse, la finance et les affaires & 69 \\
 Les relations conjugales et la vie domestique & 31 \\
-
 \bottomrule
 \end{longtable}
 
@@ -173,7 +169,6 @@ Cette distribution montre donc que la NMF ne produit pas seulement une liste de 
 Enfin, cette attribution des topics dominants peut servir de base à des analyses complémentaires. Elle permet notamment d'étudier la distribution des topics par œuvre, de comparer les romans entre eux, ou encore d'appliquer ultérieurement un détecteur de motifs aux segments associés à chaque topic afin d'identifier les motifs narratifs les plus caractéristiques de chaque thème.
 
 \subsection{Clusters obtenus avec K-means}
-
 
 \subsubsection{Extraction des mots caractéristiques des clusters}
 
@@ -228,7 +223,7 @@ Cette extraction permet de vérifier la cohérence interne des clusters. Lorsqu'
 
 \subsubsection{Nomination des clusters}
 
-Les clusters ont ensuite été nommés manuellement à partir des mots les plus représentatifs et de l'observation des segments associés. Cette étape est indispensable, car K-means ne produit pas directement des intitulés interprétables. Comme pour la NMF, le passage du résultat numérique à l'interprétation thématique repose donc sur une lecture qualitative.
+Les clusters ont ensuite été nommés manuellement à partir des mots les plus représentatifs et de l'observation des segments associés. Cette étape est indispensable, car K-means ne produit pas directement des intitulés interprétables. Comme pour la NMF, le passage du résultat numérique à l'interprétation thématique repose donc sur une lecture qualitative et est lié a l'interprétation humaine (chaque noms de clusters peut donc etre remis en cause).
 
 \begin{longtable}{p{2cm}p{11cm}}
 \caption{Noms attribués aux clusters obtenus avec K-means} \\
@@ -241,7 +236,6 @@ Les clusters ont ensuite été nommés manuellement à partir des mots les plus 
 \textbf{Cluster} & \textbf{Nom attribué} \\
 \midrule
 \endhead
-
 Cluster 1 & La table, les repas et les boissons \\
 Cluster 2 & L'école, les élèves et l'instruction \\
 Cluster 3 & Le salon, l'aristocratie et les apparences \\
@@ -282,7 +276,7 @@ Cependant, les clusters K-means ne doivent pas être interprétés comme des cat
 
 Afin de compléter l’analyse des clusters obtenus avec K-means, une classification ascendante hiérarchique a été appliquée aux centroïdes des 29 clusters. Cette étape permet d’examiner les proximités entre clusters et de regrouper ceux qui présentent des profils lexicaux similaires. Elle offre ainsi une lecture plus synthétique de la structure thématique du corpus, en passant d’une analyse détaillée cluster par cluster à une organisation en grandes familles de motifs.
 
-La méthode de Ward a été retenue pour construire cette hiérarchie. Elle consiste à fusionner progressivement les clusters en minimisant l’augmentation de la variance interne à chaque regroupement. Le dendrogramme obtenu permet de visualiser les distances entre clusters et d’identifier les principaux rapprochements thématiques.
+La méthode de Ward a été retenue pour construire cette hiérarchie. Elle consiste à fusionner progressivement les clusters en minimisant l’augmentation de la variance interne à chaque regroupement. Le dendrogramme obtenu permet de visualiser les distances entre clusters et d’identifier les principaux rapprochements thématiques\footnote{Ludovic Lebart et André Salem, \textit{Statistique textuelle}, Paris, Dunod, 1994.}.
 
 \begin{figure}[H]
     \centering

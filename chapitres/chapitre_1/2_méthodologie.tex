@@ -84,7 +84,7 @@ Ce choix permet de travailler sur une matrice plus lisible et plus pertinente po
 
 \subsubsection{Recherche du nombre de clusters}
 
-Le choix du nombre de clusters est une étape centrale dans l'utilisation de K-means. Un nombre trop faible de clusters risque de produire des groupes trop généraux, dans lesquels plusieurs thèmes différents seraient mélangés. À l'inverse, un nombre trop élevé peut produire des groupes trop fragmentés, difficiles à interpréter ou très proches les uns des autres.
+Le choix du nombre de clusters est une étape centrale dans l'utilisation de K-means. Un nombre trop faible de clusters risque de produire des groupes trop généraux, dans lesquels plusieurs thèmes différents seraient mélangés. À l'inverse, un nombre trop élevé peut produire des groupes trop fragmentés, difficiles à interpréter ou très proches les uns des autres, nous avons donc le meme probleme qu'avec l'approche NMF.
 
 Afin d'orienter ce choix, plusieurs valeurs de \texttt{k} ont été testées. Pour chaque valeur comprise entre 2 et 40, un modèle K-means a été entraîné, puis évalué à l'aide du score de silhouette\footnote{Peter J. Rousseeuw, « Silhouettes: A graphical aid to the interpretation and validation of cluster analysis », \textit{Journal of Computational and Applied Mathematics}, vol. 20, 1er novembre 1987, p. 53--65.}.
 
@@ -99,7 +99,7 @@ Une visualisation des scores de silhouette a ensuite été produite afin d'obser
     \label{fig:silhouette_kmeans}
 \end{figure}
 
-Dans cette analyse, le score de silhouette fournit une indication quantitative, mais il ne suffit pas à lui seul à déterminer le nombre de clusters à retenir. Comme pour la NMF, le choix final repose donc sur un compromis entre indicateurs statistiques, lisibilité des résultats et cohérence interprétative. Le nombre de 29 clusters a été retenu afin de permettre une comparaison directe avec les 29 topics issus de la NMF, tout en conservant un niveau de détail suffisant pour distinguer les principaux motifs thématiques du corpus. De plus, le score de silhouette reste relativement stable autour de cette valeur, ce qui indique que les clusters obtenus sont globalement cohérents.
+Dans cette analyse, le score de silhouette fournit une indication quantitative, mais il ne suffit pas à lui seul à déterminer le nombre de clusters à retenir. Comme pour la NMF, le choix final repose donc sur un compromis entre indicateurs statistiques, lisibilité des résultats et cohérence interprétative. Le nombre de 29 clusters a été retenu afin de permettre une comparaison directe avec les 29 topics issus de la NMF, tout en conservant un niveau de détail suffisant pour distinguer les principaux motifs thématiques du corpus. De plus, le score de silhouette reste relativement stable autour de cette valeur, ce qui indique que les clusters obtenus sont globalement cohérents. Le choix de 29 topics pour la NMF et de 29 clusters pour K-means permet donc d'obtenir une structuration thématique comparable entre les deux méthodes, facilitant ainsi l'interprétation des résultats et la mise en évidence de régularités dans le corpus. Il y a donc une validation croisée entre les deux approches, qui renforce la confiance dans les regroupements identifiés (29 topics et 29 clusters).
 
 \subsubsection{Entraînement du modèle K-means}
 
@@ -107,20 +107,17 @@ Le modèle K-means final a été entraîné avec 29 clusters. Le paramètre \tex
 
 Chaque segment du corpus reçoit ainsi un numéro de cluster après l'entraînement du modèle. L'ajout de \texttt{+ 1} permet de numéroter les clusters à partir de 1 plutôt qu'à partir de 0, ce qui rend les résultats plus lisibles dans les tableaux et les visualisations. Chaque paquet de phrases est donc associé à un groupe thématique déterminé par sa proximité avec les autres segments du corpus.
 
-
 \subsubsection{Limites de l'approche par K-means}
 
 L'utilisation de K-means présente plusieurs limites qu'il faut prendre en compte. Tout d'abord, la méthode impose une appartenance unique de chaque segment à un cluster. Or, dans un texte littéraire, un même passage peut contenir plusieurs thèmes simultanément. Un segment peut par exemple associer la famille, l'argent et la souffrance sociale, mais K-means l'attribue malgré tout à un seul groupe. Cette contrainte rend la méthode moins souple que la NMF pour représenter la complexité thématique des textes.
 
-Ensuite, le choix du nombre de clusters reste en partie subjectif. Le score de silhouette fournit une indication utile, mais il ne suffit pas toujours à identifier une valeur optimale. Dans cette analyse, le choix de 29 clusters repose donc sur un arbitrage méthodologique : il permet de conserver un niveau de détail comparable à celui de la NMF, tout en produisant des catégories suffisamment interprétables.
+Ensuite, le choix du nombre de clusters reste en partie subjectif. Le score de silhouette fournit une indication utile, mais il ne suffit pas toujours à identifier une valeur optimale. Dans cette analyse, le choix de 29 clusters repose donc sur un arbitrage méthodologique : il permet de conserver un niveau de détail comparable à celui de la NMF, tout en produisant des catégories suffisamment interprétables. Néanmoins, les deux choix retenant 29 topics et 29 clusters ne sont pas nécessairement les seuls possibles, et d'autres valeurs pourraient également être défendues selon les critères retenus mais il y a quand meme une tendance à la convergence des deux méthodes sur ce nombre de regroupements au vu des resultats obtenu.
 
 Une autre limite concerne la sensibilité de K-means à la représentation vectorielle. Les clusters dépendent fortement de la matrice TF-IDF, des choix de lemmatisation, de la liste de mots exclus et des paramètres \texttt{min\_df} et \texttt{max\_df}. Une modification de ces choix peut modifier la structure des clusters obtenus, comme cela peut également être le cas avec la NMF. Les résultats doivent donc être compris comme une cartographie exploratoire du corpus, et non comme une classification définitive.
 
 Enfin, comme pour la NMF, la nomination des clusters repose sur une interprétation humaine. Les intitulés attribués aux clusters et aux grandes familles de motifs sont construits à partir des mots les plus représentatifs et de l'observation des segments. Cette étape qualitative est nécessaire pour donner du sens aux résultats, mais elle introduit aussi une part de subjectivité.
 
 \subsubsection{Bilan méthodologique}
-
 L'ajout d'une classification hiérarchique sur les centres des clusters permet également d'organiser les résultats en grandes familles de motifs. Cette étape rend l'analyse plus lisible, car elle permet de passer de 29 clusters détaillés à cinq ensembles thématiques plus généraux, qui seront interprétés dans la section consacrée aux résultats.
-
 
 Après la présentation des deux méthodes, la section suivante expose les principaux résultats obtenus, d'abord pour la NMF, puis pour K-means.
