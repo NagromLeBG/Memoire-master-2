@@ -1,3 +1,4 @@
+% !Bibliography = biber
 \documentclass[12pt,a4paper,oneside]{report}
 
 \input{preambule}
@@ -20,7 +21,8 @@
 \chapter*{Remerciements}
 \addcontentsline{toc}{chapter}{Remerciements}
 
-Je tiens à remercier...
+Je tiens à remercier mes parents pour leur soutien et leur encouragement tout au long de mes études. Je remercie également mes amis et collègues pour leurs conseils et leur aide précieuse et plus particulierement à ma conjointe Mathilde DUCOS. Enfin, je souhaite exprimer ma gratitude au professeur Dominique Legallois pour m'avoir accépté en stage au laboratoire LATTICE, pour son encadrement et ses conseils tout au long de ce projet. Je remercie également tous les membres du laboratoire LATTICE pour leur accueil chaleureux et leur soutien.
+Je remercie également Madame Pegah pour son encadrement et ses conseils tout au long de ce projet. Ainsi que tous le personnel encandrant du master HN de Lyon.   
 
 \chapter*{Résumé}
 \addcontentsline{toc}{chapter}{Résumé}
@@ -28,8 +30,8 @@ Je tiens à remercier...
 Ce mémoire porte sur...
 
 \tableofcontents
-%\listoffigures
-%\listoftables
+\listoffigures
+\listoftables
 
 \clearpage
 \pagenumbering{arabic}
@@ -38,8 +40,9 @@ Ce mémoire porte sur...
 \input{chapitres/chapitre_1}
 \input{chapitres/chapitre_3}
 
+\nocite{*}
+\printbibliography[heading=bibintoc] 
 
-%\printbibliography
 
 \appendix
 \input{chapitres/annex_code.tex}
